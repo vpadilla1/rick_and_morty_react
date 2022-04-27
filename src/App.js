@@ -1,12 +1,32 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import './App.css';
+import Character from './components/character';
+import CharacterName from './components/character-name';
+import CharacterImage from './components/character-image';
+import CharacterDescription from './components/character-description'
+import CharacterPlaceholder from './components/character-placeholder'
+import API from './API/api'
+
+
+const api = new API()
+
 
 function App() {
+  const [character, setCharacter] = useState({})
+  useEffect(() => {
+    async function getCharacter() {
+      setCharacter(await api.getCharacter(78))
+      //const character = 78
+      console.log(character.name);
+    }
+    getCharacter()
+  }, [])
   return (
     <div className="App">
-      <div className="placeholder-container">
-        <h1 id="character-name-placeholder" className="character-name-placeholder"></h1>
-      </div>
+      {/*  <Character/> */}
+
+      <CharacterPlaceholder name={ character.name}/>
+      
       <div className="grid">
         <span className="asset top">
           <span className="dot"></span>
@@ -14,35 +34,32 @@ function App() {
           <span className="dot"></span>
           <span className="line"></span>
         </span>
-        <img className="logo" src="./static/images/logo@2x.png" width="280" alt="" />
+        <img className="logo" src="../public/images/logo@2x.png" width="280" alt="" />
         <div className="social">
           <a href="https://instagram.com/LeonidasEsteban">
-            <img src="./static/images/instagram.svg" alt="" />
+            <img src="../public/images/instagram.svg" alt="" />
           </a>
           <a href="https://facebook.com/LeonidasEsteban">
-            <img src="./static/images/facebook.svg" alt="" />
+            <img src="../public/images/facebook.svg" alt="" />
           </a>
           <a href="https://twitter.com/LeonidasEsteban">
-            <img src="./static/images/twitter.svg" alt="" />
+            <img src="../public/images/twitter.svg" alt="" />
           </a>
         </div>
         <div className="navigation name">
           <a href="#">Name</a>
         </div>
-        <div id="character-name-container" className="character-name-container">
-
-        </div>
-
-        <div id="character-image-container" className="character-image-container">
-        </div>
+        
+        <CharacterName name={character.name}/>
+      
+        <CharacterImage image={character.image} name={character.name}/>
+    
         <div className="navigation about">
           <a href="#">About</a>
         </div>
 
+        <CharacterDescription gender={character.gender} status={character.status} species={ character.species}/>
 
-        <div id="character-description-container" className="character-description-container">
-
-        </div>
         <span className="asset bottom">
           <span className="line"></span>
           <span className="dot"></span>
@@ -54,6 +71,8 @@ function App() {
         <div className="learn-more">
           <span>learn more</span>
         </div>
+
+        <div class="arrow" id="load-next"></div>
       </div>
     </div>
   )
